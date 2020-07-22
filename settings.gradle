@@ -1,0 +1,4 @@
+include ':userCenter'
+include ':pluginLib'
+include ':app'
+rootProject.name = "DynamicApk"
