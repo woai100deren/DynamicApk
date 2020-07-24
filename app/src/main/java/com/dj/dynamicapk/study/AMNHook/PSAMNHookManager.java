@@ -18,17 +18,27 @@ public class PSAMNHookManager {
     public static void hook(){
         try {
             Object singleton = null;
-            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                //获取ActivityTaskManager的单例IActivityTaskManagerSingleton，IActivityTaskManagerSingleton是final静态的
+                singleton = RefInvoke.getStaticFieldObject("android.app.ActivityTaskManager", "IActivityTaskManagerSingleton");
+            } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 //获取ActivityManager的单例IActivityManagerSingleton，IActivityManagerSingleton是final静态的
                 singleton = RefInvoke.getStaticFieldObject("android.app.ActivityManager", "IActivityManagerSingleton");
             }else if(android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                //获取ActivityManagerNative的单例gDefault，gDefault静态的
                 singleton = RefInvoke.getStaticFieldObject("android.app.ActivityManagerNative", "gDefault");
             }
 
             //IActivityManagerSingleton是一个android.util.Singleton<T>对象，取出这个单例中的mInstance字段
             Object mInstance = RefInvoke.getFieldObject("android.util.Singleton", singleton, "mInstance");
+
             //创建一个这个对象的代理对象MockClass，然后替换这个字段，让我们的代理干活
-            Class<?> classB2Interface = Class.forName("android.app.IActivityManager");
+            Class<?> classB2Interface = null;
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                classB2Interface = Class.forName("android.app.IActivityManager");
+            } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                classB2Interface = Class.forName("android.app.IActivityTaskManager");
+            }
 
             //loader: 用哪个类加载器去加载代理对象
             //interfaces:动态代理类需要实现的接口
