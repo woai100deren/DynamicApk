@@ -23,6 +23,7 @@
         <activity android:name=".study.PluginStudyMainActivity"/>
         <activity android:name=".study.instrumentationHook.PSInstrumentationHook"/>
         <activity android:name=".study.instrumentationHook.PSInstrumentationHookSecond"/>
+        <activity android:name=".study.AMNHook.PSAMNHook"/>
     </application>
 
 </manifest>

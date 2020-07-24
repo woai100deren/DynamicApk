@@ -52,7 +52,7 @@ public abstract class PSInstrumentationHookBaseActivity extends Activity {
         public ActivityResult execStartActivity(
                 Context who, IBinder contextThread, IBinder token, Activity target,
                 Intent intent, int requestCode, Bundle options) {
-            Log.e(TAG,"我在所有页面跳转之前，打印了这个日志");//此处延伸思考，可以对页面做打点，统计PV
+            Log.e(TAG,"Instrumentation Hook方式：我在所有页面跳转之前，打印了这个日志");//此处延伸思考，可以对页面做打点，统计PV
 
             Class[] classes = {Context.class,IBinder.class,IBinder.class,Activity.class,Intent.class,int.class,Bundle.class};
             Object[] objects = {who,contextThread,token,target,intent,requestCode,options};
