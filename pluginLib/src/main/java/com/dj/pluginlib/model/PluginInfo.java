@@ -6,15 +6,15 @@ import android.content.res.Resources;
  */
 public class PluginInfo {
     private String dexPath; // 插件的DexPath
-
     private ClassLoader classLoader; // 加载插件的ClassLoader
-
     private Resources resources; // 插件中的Resources
+    private Resources.Theme theme;//插件中的theme
 
-    public PluginInfo(String dexPath, ClassLoader classLoader, Resources resources) {
+    public PluginInfo(String dexPath, ClassLoader classLoader, Resources resources,Resources.Theme theme) {
         this.dexPath = dexPath;
         this.classLoader = classLoader;
         this.resources = resources;
+        this.theme = theme;
     }
 
     public String getDexPath() {
@@ -39,5 +39,13 @@ public class PluginInfo {
 
     public void setResources(Resources resources) {
         this.resources = resources;
+    }
+
+    public Resources.Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Resources.Theme theme) {
+        this.theme = theme;
     }
 }

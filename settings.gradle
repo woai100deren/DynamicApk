@@ -1,3 +1,4 @@
+include ':baidumap'
 include ':userCenter'
 include ':pluginLib'
 include ':app'

@@ -1,4 +1,4 @@
-## Android插件化调研
+## Android插件化调研（第一代插件化）
 
 dynamic-load-apk最早使用ProxyActivity这种静态代理技术，由ProxyActivity去控制插件中PluginActivity的生命周期。
 该种方式缺点明显，插件中的activity必须继承PluginActivity，开发时要小心处理context，不支持launchMode，不支持Service以及BroadCastReceiver插件化开发。

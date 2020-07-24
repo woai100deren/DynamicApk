@@ -34,11 +34,11 @@ public class ProxyActivity extends Activity {
         return resources == null ? super.getResources() : resources;
     }
 
-//    @Override
-//    public Resources.Theme getTheme() {
-//        Resources.Theme theme = mPluginController.getTheme();
-//        return theme == null ? super.getTheme() : theme;
-//    }
+    @Override
+    public Resources.Theme getTheme() {
+        Resources.Theme theme = mPluginController.getTheme();
+        return theme == null ? super.getTheme() : theme;
+    }
 
     @Override
     public AssetManager getAssets() {

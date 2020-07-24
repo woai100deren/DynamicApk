@@ -18,6 +18,7 @@ public class PluginLifeCircleController implements PluginActivityInterface {
     private PluginActivityInterface mPlugin;
     private Resources mResources;
     private ClassLoader classLoader;
+    private Resources.Theme theme;
 
     public void handleIntent(Intent intent, Activity activity) {
         String reallyActivity = intent.getExtras().getString(PluginConst.REALLY_ACTIVITY_NAME);
@@ -47,6 +48,7 @@ public class PluginLifeCircleController implements PluginActivityInterface {
     private void initResources(String dexPath) {
         mResources = PluginManager.getInstance().getPluginItem(dexPath).getResources();
         classLoader = PluginManager.getInstance().getPluginItem(dexPath).getClassLoader();
+        theme = PluginManager.getInstance().getPluginItem(dexPath).getTheme();
     }
 
     @Override
@@ -117,5 +119,9 @@ public class PluginLifeCircleController implements PluginActivityInterface {
 
     public ClassLoader getClassLoader() {
         return classLoader;
+    }
+
+    public Resources.Theme getTheme(){
+        return theme;
     }
 }

@@ -21,8 +21,14 @@ import com.dj.pluginlib.consts.PluginConst;
 import com.dj.pluginlib.interfaces.PluginActivityInterface;
 import com.dj.pluginlib.manager.PluginManager;
 
+/**
+ * 插件页面需要继承的基础activity类，所有插件activity必须继承它
+ */
 public class PluginBaseActivity extends AppCompatActivity implements PluginActivityInterface{
     public final static String TAG = PluginBaseActivity.class.getSimpleName();
+    /**
+     * 插件功能内，要用到this的地方，都要替换成使用that
+     */
     protected Activity that;
     boolean isPlugin = false; // 是否是插件运行
     private int launchModel = -1;

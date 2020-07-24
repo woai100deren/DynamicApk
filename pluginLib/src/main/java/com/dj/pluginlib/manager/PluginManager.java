@@ -1,5 +1,6 @@
 package com.dj.pluginlib.manager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -62,6 +63,7 @@ public class PluginManager {
         DexClassLoader dexClassLoader = new DexClassLoader(apkPath, odexFile.getAbsolutePath(), null, context.getClassLoader());
         //创建AssetManager，然后创建Resources
         Resources resources = null;
+        Resources.Theme mTheme;
         try {
             AssetManager assetManager = AssetManager.class.newInstance();
             Method method = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
@@ -69,11 +71,13 @@ public class PluginManager {
             resources = new Resources(assetManager,
                     context.getResources().getDisplayMetrics(),
                     context.getResources().getConfiguration());
+            mTheme = resources.newTheme();
+            mTheme.setTo(context.getTheme());
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        pluginItemHashMap.put(apkPath, new PluginInfo(apkPath, dexClassLoader, resources));
+        pluginItemHashMap.put(apkPath, new PluginInfo(apkPath, dexClassLoader, resources,mTheme));
         return true;
     }
 
