@@ -26,6 +26,7 @@
         <activity android:name=".study.AMNHook.PSAMNHook"/>
         <activity android:name=".study.dynamic.test1.PSTest1Activity"/>
         <activity android:name=".study.dynamic.test2.PSTest2Activity"/>
+        <activity android:name=".study.changeSkin.PSChangeSkinActivity"/>
     </application>
 
 </manifest>

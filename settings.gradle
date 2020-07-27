@@ -1,3 +1,4 @@
+include ':skin1'
 include ':MyPluginLibrary1'
 include ':dynamicPlugin1'
 include ':baidumap'
