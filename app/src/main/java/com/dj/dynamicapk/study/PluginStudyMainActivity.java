@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import com.dj.dynamicapk.R;
 import com.dj.dynamicapk.study.AMNHook.PSAMNHook;
 import com.dj.dynamicapk.study.instrumentationHook.PSInstrumentationHook;
+import com.dj.dynamicapk.study.test1.PSTest1Activity;
 
 public class PluginStudyMainActivity extends Activity {
     @Override
@@ -28,6 +29,13 @@ public class PluginStudyMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PluginStudyMainActivity.this, PSAMNHook.class));
+            }
+        });
+
+        findViewById(R.id.dynamicTest1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PluginStudyMainActivity.this, PSTest1Activity.class));
             }
         });
     }

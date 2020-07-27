@@ -11,8 +11,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/MyPluginLibrary1" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/baidumap" />
+            <option value="$PROJECT_DIR$/dynamicPlugin1" />
             <option value="$PROJECT_DIR$/pluginLib" />
             <option value="$PROJECT_DIR$/userCenter" />
           </set>

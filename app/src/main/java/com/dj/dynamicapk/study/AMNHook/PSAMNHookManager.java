@@ -35,9 +35,9 @@ public class PSAMNHookManager {
             //创建一个这个对象的代理对象MockClass，然后替换这个字段，让我们的代理干活
             Class<?> classB2Interface = null;
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                classB2Interface = Class.forName("android.app.IActivityManager");
-            } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 classB2Interface = Class.forName("android.app.IActivityTaskManager");
+            } else if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                classB2Interface = Class.forName("android.app.IActivityManager");
             }
 
             //loader: 用哪个类加载器去加载代理对象

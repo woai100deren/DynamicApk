@@ -12,7 +12,11 @@ import com.dj.pluginlib.ProxyActivity;
 import com.dj.pluginlib.consts.PluginConst;
 import com.dj.pluginlib.model.PluginInfo;
 
+import java.io.Closeable;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 
@@ -57,10 +61,8 @@ public class PluginManager {
      * @param apkPath APK或者jar或者dex的目录
      */
     public boolean loadPluginApk(String apkPath) {
-        //Dex优化后的缓存目录
-        File odexFile = context.getDir("odex", Context.MODE_PRIVATE);
         //创建DexClassLoader加载器
-        DexClassLoader dexClassLoader = new DexClassLoader(apkPath, odexFile.getAbsolutePath(), null, context.getClassLoader());
+        DexClassLoader dexClassLoader = getPluginApkDexClassLoader(apkPath);
         //创建AssetManager，然后创建Resources
         Resources resources = null;
         Resources.Theme mTheme;
@@ -122,5 +124,71 @@ public class PluginManager {
             e.printStackTrace();
         }
         return aClass != null;
+    }
+
+    /**
+     * 把Assets里面得文件复制到 /data/data/files 目录下
+     *
+     * @param context
+     * @param sourceName
+     */
+    public void extractAssets(Context context, String sourceName) {
+        AssetManager am = context.getAssets();
+        InputStream is = null;
+        FileOutputStream fos = null;
+        try {
+            is = am.open(sourceName);
+            File extractFile = context.getFileStreamPath(sourceName);
+            fos = new FileOutputStream(extractFile);
+            byte[] buffer = new byte[1024];
+            int count = 0;
+            while ((count = is.read(buffer)) > 0) {
+                fos.write(buffer, 0, count);
+            }
+            fos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            closeSilently(is);
+            closeSilently(fos);
+        }
+    }
+
+    private static void closeSilently(Closeable closeable) {
+        if (closeable == null) {
+            return;
+        }
+        try {
+            closeable.close();
+        } catch (Throwable e) {
+            // ignore
+        }
+    }
+
+    /**
+     * 获取加载插件的DexClassLoader
+     * @param context
+     * @param pluginName assets下插件名称(包含后缀)
+     */
+    public DexClassLoader getAssetsPluginApkDexClassLoader(Context context,String pluginName) {
+        File extractFile = context.getFileStreamPath(pluginName);
+        String dexPath = extractFile.getPath();
+        //Dex优化后的缓存目录
+        File odexFile = context.getDir("odex", Context.MODE_PRIVATE);
+        //创建DexClassLoader加载器
+        DexClassLoader dexClassLoader = new DexClassLoader(dexPath, odexFile.getAbsolutePath(), null, context.getClassLoader());
+        return dexClassLoader;
+    }
+
+    /**
+     * 获取加载插件的DexClassLoader
+     * @param apkPath APK或者jar或者dex的目录
+     */
+    public DexClassLoader getPluginApkDexClassLoader(String apkPath) {
+        //Dex优化后的缓存目录
+        File odexFile = context.getDir("odex", Context.MODE_PRIVATE);
+        //创建DexClassLoader加载器
+        DexClassLoader dexClassLoader = new DexClassLoader(apkPath, odexFile.getAbsolutePath(), null, context.getClassLoader());
+        return dexClassLoader;
     }
 }

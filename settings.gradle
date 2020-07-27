@@ -1,3 +1,5 @@
+include ':MyPluginLibrary1'
+include ':dynamicPlugin1'
 include ':baidumap'
 include ':userCenter'
 include ':pluginLib'
