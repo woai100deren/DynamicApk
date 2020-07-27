@@ -1,4 +1,4 @@
-package com.dj.dynamicapk.study.test1;
+package com.dj.dynamicapk.study.dynamic.test1;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -11,8 +11,6 @@ import com.dj.dynamicapk.R;
 import com.dj.mypluginlibrary1.IBean;
 import com.dj.mypluginlibrary1.ICallback;
 import com.dj.pluginlib.manager.PluginManager;
-
-import java.io.File;
 
 import dalvik.system.DexClassLoader;
 

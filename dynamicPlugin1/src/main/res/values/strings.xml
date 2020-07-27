@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="dynamicPlugin1_hello_world">dynamicPlugin1 hello world</string>
+</resources>

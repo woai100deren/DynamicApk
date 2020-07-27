@@ -24,7 +24,8 @@
         <activity android:name=".study.instrumentationHook.PSInstrumentationHook"/>
         <activity android:name=".study.instrumentationHook.PSInstrumentationHookSecond"/>
         <activity android:name=".study.AMNHook.PSAMNHook"/>
-        <activity android:name=".study.test1.PSTest1Activity"/>
+        <activity android:name=".study.dynamic.test1.PSTest1Activity"/>
+        <activity android:name=".study.dynamic.test2.PSTest2Activity"/>
     </application>
 
 </manifest>
