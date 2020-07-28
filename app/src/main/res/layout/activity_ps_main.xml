@@ -33,4 +33,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="change skin"/>
+
+    <Button
+        android:id="@+id/dynamicTest3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dynamicTest3"/>
 </LinearLayout>

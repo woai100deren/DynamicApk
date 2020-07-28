@@ -1,6 +1,7 @@
 package com.dj.dynamicapk.application;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.dj.dynamicapk.study.AMNHook.PSAMNHookManager;
 import com.dj.pluginlib.manager.PluginManager;
@@ -8,6 +9,7 @@ import com.dj.pluginlib.manager.PluginManager;
 import dalvik.system.DexClassLoader;
 
 public class DynamicApplication extends Application {
+    private static Context sContext;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,5 +29,15 @@ public class DynamicApplication extends Application {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        sContext = base;
+    }
+
+    public static Context getContext() {
+        return sContext;
     }
 }

@@ -11,6 +11,7 @@ import com.dj.dynamicapk.R;
 import com.dj.dynamicapk.study.AMNHook.PSAMNHook;
 import com.dj.dynamicapk.study.changeSkin.PSChangeSkinActivity;
 import com.dj.dynamicapk.study.dynamic.test2.PSTest2Activity;
+import com.dj.dynamicapk.study.dynamicProxy.PSDynamicProxyActivity;
 import com.dj.dynamicapk.study.instrumentationHook.PSInstrumentationHook;
 import com.dj.dynamicapk.study.dynamic.test1.PSTest1Activity;
 
@@ -52,6 +53,13 @@ public class PluginStudyMainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PluginStudyMainActivity.this, PSChangeSkinActivity.class));
+            }
+        });
+
+        findViewById(R.id.dynamicTest3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PluginStudyMainActivity.this, PSDynamicProxyActivity.class));
             }
         });
     }
