@@ -100,7 +100,7 @@ public class PSAMSHookHelper {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-            Log.e(TAG, method.getName());
+            Log.e(TAG, "执行了方法："+method.getName());
             // 替身Activity的包名, 也就是我们自己的包名
             String stubPackage = "com.dj.dynamicapk";
             if ("startActivity".equals(method.getName())) {
@@ -181,6 +181,26 @@ public class PSAMSHookHelper {
                 newIntent.setComponent(componentName);
 
                 // Replace Intent, cheat AMS
+                args[index] = newIntent;
+
+                Log.d(TAG, "hook success");
+                return method.invoke(mBase, args);
+            }else if("bindService".equals(method.getName())){
+                //找到参数里面的第一个Intent对象
+                // 找到参数里面的第一个Intent 对象
+                int index = 0;
+                for (int i = 0; i < args.length; i++) {
+                    if (args[i] instanceof Intent) {
+                        index = i;
+                        break;
+                    }
+                }
+                Intent rawIntent = (Intent) args[index];
+                String rawServiceName = rawIntent.getComponent().getClassName();
+                String stubServiceName = DynamicApplication.pluginServices.get(rawServiceName);
+                ComponentName componentName = new ComponentName(stubPackage, stubServiceName);
+                Intent newIntent = new Intent();
+                newIntent.setComponent(componentName);
                 args[index] = newIntent;
 
                 Log.d(TAG, "hook success");

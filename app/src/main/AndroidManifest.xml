@@ -32,6 +32,7 @@
         <activity android:name=".study.dynamicService.PSDynamicServiceActivity"/>
 
         <service android:name=".study.dynamicService.PSStubService1"/>
+        <service android:name=".study.dynamicService.PSStubService2"/>
     </application>
 
 </manifest>

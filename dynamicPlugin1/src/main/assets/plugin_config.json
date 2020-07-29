@@ -5,7 +5,7 @@
       "StubService": "com.dj.dynamicapk.study.dynamicService.PSStubService1"
     },
     {
-      "PluginService": "jianqiang.com.testservice1.MyService2",
+      "PluginService": "com.dj.dynamicplugin1.DYPluginService2",
       "StubService": "com.dj.dynamicapk.study.dynamicService.PSStubService2"
     }
   ]

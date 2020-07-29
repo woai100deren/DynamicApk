@@ -19,5 +19,10 @@
                 <action android:name="dj_action1" />
             </intent-filter>
         </service>
+        <service android:name=".DYPluginService2" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <action android:name="dj_action2" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

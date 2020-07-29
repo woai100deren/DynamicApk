@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +25,7 @@ import org.json.JSONObject;
 import java.io.File;
 
 public class PSDynamicServiceActivity extends Activity {
+    private static final String TAG = PSDynamicServiceActivity.class.getName();
     private static final String apkName = "dynamicPlugin1-debug.apk";
     private Intent intent = new Intent();
 
@@ -34,20 +37,42 @@ public class PSDynamicServiceActivity extends Activity {
                 new ComponentName("com.dj.dynamicplugin1",
                         "com.dj.dynamicplugin1.DYPluginService1"));
 
-        findViewById(R.id.service).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.serviceSend).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 startService(intent);
             }
         });
+
+        findViewById(R.id.serviceBind).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setComponent(
+                        new ComponentName("com.dj.dynamicplugin2",
+                                "com.dj.dynamicplugin1.DYPluginService2"));
+                bindService(intent,connection,BIND_AUTO_CREATE);
+            }
+        });
     }
+
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.e(TAG,"onServiceConnected");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.e(TAG,"onServiceDisconnected");
+        }
+    };
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         stopService(intent);
+        unbindService(connection);
     }
 
     @Override
@@ -60,7 +85,7 @@ public class PSDynamicServiceActivity extends Activity {
             File apkFile = getFileStreamPath(apkName);
             File optDexFile = Utils.getPluginOptDexDir(apkName);
 //            PSBaseDexClassLoaderHookHelper.patchClassLoader(getClassLoader(), dexFile, optDexFile);
-            Log.e("dj",optDexFile.getAbsolutePath());
+            Log.e(TAG,optDexFile.getAbsolutePath());
 //            PSClassLoaderHookHelper.hookV23(getClassLoader(), optDexFile, getCacheDir());
             PSClassLoaderHookHelper.loadClass(this,apkFile.getAbsolutePath());
 
