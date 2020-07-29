@@ -6,10 +6,14 @@ import android.content.Context;
 import com.dj.dynamicapk.study.AMNHook.PSAMNHookManager;
 import com.dj.pluginlib.manager.PluginManager;
 
+import java.util.HashMap;
+
 import dalvik.system.DexClassLoader;
 
 public class DynamicApplication extends Application {
     private static Context sContext;
+    public static HashMap<String, String> pluginServices;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -35,6 +39,7 @@ public class DynamicApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         sContext = base;
+        pluginServices = new HashMap<String, String>();
     }
 
     public static Context getContext() {

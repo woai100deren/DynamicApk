@@ -8,11 +8,16 @@
         android:label="dynamicPlugin1"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true">
-            <activity android:name=".DynamicMainActivity">
-                <intent-filter>
-                    <action android:name="android.intent.action.MAIN" />
-                    <category android:name="android.intent.category.LAUNCHER" />
-                </intent-filter>
-            </activity>
+        <activity android:name=".DynamicMainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <service android:name=".DYPluginService1" android:enabled="true" android:exported="true">
+            <intent-filter>
+                <action android:name="dj_action1" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>

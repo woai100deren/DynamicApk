@@ -39,4 +39,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="dynamicTest3"/>
+
+    <Button
+        android:id="@+id/dynamicService"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="dynamicService"/>
 </LinearLayout>

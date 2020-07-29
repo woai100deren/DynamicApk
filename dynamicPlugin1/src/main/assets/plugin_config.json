@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    {
+      "PluginService": "com.dj.dynamicplugin1.DYPluginService1",
+      "StubService": "com.dj.dynamicapk.study.dynamicService.PSStubService1"
+    },
+    {
+      "PluginService": "jianqiang.com.testservice1.MyService2",
+      "StubService": "com.dj.dynamicapk.study.dynamicService.PSStubService2"
+    }
+  ]
+}

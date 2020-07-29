@@ -4,11 +4,13 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.dj.dynamicapk.application.DynamicApplication;
 import com.dj.dynamicapk.utils.RefInvoke;
 
 import java.lang.reflect.Field;
@@ -99,7 +101,8 @@ public class PSAMSHookHelper {
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
             Log.e(TAG, method.getName());
-
+            // 替身Activity的包名, 也就是我们自己的包名
+            String stubPackage = "com.dj.dynamicapk";
             if ("startActivity".equals(method.getName())) {
                 // 只拦截这个方法
                 // 替换参数, 任你所为;甚至替换原始Activity启动别的Activity偷梁换柱
@@ -116,8 +119,6 @@ public class PSAMSHookHelper {
                 }
                 raw = (Intent) args[index];
                 Intent newIntent = new Intent();
-                // 替身Activity的包名, 也就是我们自己的包名
-                String stubPackage = "com.dj.dynamicapk";
                 // 这里我们把启动的Activity临时替换为 StubActivity
                 ComponentName componentName = new ComponentName(stubPackage, PSStubActivity.class.getName());
                 newIntent.setComponent(componentName);
@@ -125,6 +126,63 @@ public class PSAMSHookHelper {
                 newIntent.putExtra(EXTRA_TARGET_INTENT, raw);
                 // 替换掉Intent, 达到欺骗AMS的目的
                 args[index] = newIntent;
+                Log.d(TAG, "hook success");
+                return method.invoke(mBase, args);
+            }else if ("startService".equals(method.getName())) {
+                // 只拦截这个方法
+                // 替换参数, 任你所为;甚至替换原始StubService启动别的Service偷梁换柱
+
+                // 找到参数里面的第一个Intent 对象
+                int index = 0;
+                for (int i = 0; i < args.length; i++) {
+                    if (args[i] instanceof Intent) {
+                        index = i;
+                        break;
+                    }
+                }
+
+                //get StubService form DynamicApplication.pluginServices
+                Intent rawIntent = (Intent) args[index];
+                String rawServiceName = rawIntent.getComponent().getClassName();
+
+                String stubServiceName = DynamicApplication.pluginServices.get(rawServiceName);
+
+                // replace Plugin Service of StubService
+                ComponentName componentName = new ComponentName(stubPackage, stubServiceName);
+                Intent newIntent = new Intent();
+                newIntent.setComponent(componentName);
+
+                // Replace Intent, cheat AMS
+                args[index] = newIntent;
+
+                Log.d(TAG, "hook success");
+                return method.invoke(mBase, args);
+            } else if ("stopService".equals(method.getName())) {
+                // 只拦截这个方法
+                // 替换参数, 任你所为;甚至替换原始StubService启动别的Service偷梁换柱
+
+                // 找到参数里面的第一个Intent 对象
+                int index = 0;
+                for (int i = 0; i < args.length; i++) {
+                    if (args[i] instanceof Intent) {
+                        index = i;
+                        break;
+                    }
+                }
+
+                //get StubService form DynamicApplication.pluginServices
+                Intent rawIntent = (Intent) args[index];
+                String rawServiceName = rawIntent.getComponent().getClassName();
+                String stubServiceName = DynamicApplication.pluginServices.get(rawServiceName);
+
+                // replace Plugin Service of StubService
+                ComponentName componentName = new ComponentName(stubPackage, stubServiceName);
+                Intent newIntent = new Intent();
+                newIntent.setComponent(componentName);
+
+                // Replace Intent, cheat AMS
+                args[index] = newIntent;
+
                 Log.d(TAG, "hook success");
                 return method.invoke(mBase, args);
             }
@@ -147,11 +205,24 @@ public class PSAMSHookHelper {
             //从android p开始，activity的启动流程有所变化。ActivityThread中，activity的生命周期，都是在EXECUTE_TRANSACTION回调中完成
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 switch (msg.what) {
+                    // ActivityThread里面 "CREATE_SERVICE" 这个字段的值是114
+                    // 本来使用反射的方式获取最好, 这里为了简便直接使用硬编码
+                    case 114:
+//                        try{
+//                            Object obj = msg.obj;
+//                            //获取ClientTransaction中的mActivityCallbacks集合
+//                            Class<?> clazz = Class.forName("android.app.servertransaction.ServiceArgsData");
+//                            Field mActivityCallbacksFiled = clazz.getDeclaredField("mActivityCallbacks");
+//                        }catch (Exception e){
+//                            e.printStackTrace();
+//                        }
+                        handleCreateService(msg);
+                        break;
                     // ActivityThread里面 "EXECUTE_TRANSACTION" 这个字段的值是159
                     // 本来使用反射的方式获取最好, 这里为了简便直接使用硬编码
                     case 159:
-                        Object obj = msg.obj;
                         try {
+                            Object obj = msg.obj;
                             //获取ClientTransaction中的mActivityCallbacks集合
                             Class<?> clazz = Class.forName("android.app.servertransaction.ClientTransaction");
                             Field mActivityCallbacksFiled = clazz.getDeclaredField("mActivityCallbacks");
@@ -198,6 +269,11 @@ public class PSAMSHookHelper {
                     case 100:
                         handleLaunchActivity(msg);
                         break;
+                    // ActivityThread里面 "CREATE_SERVICE" 这个字段的值是114
+                    // 本来使用反射的方式获取最好, 这里为了简便直接使用硬编码
+                    case 114:
+                        handleCreateService(msg);
+                        break;
                 }
             }
 
@@ -226,6 +302,25 @@ public class PSAMSHookHelper {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        private void handleCreateService(Message msg) {
+            // 这里简单起见,直接取出插件Servie
+
+            Object obj = msg.obj;
+            ServiceInfo serviceInfo = (ServiceInfo) RefInvoke.getFieldObject(obj, "info");
+
+            String realServiceName = null;
+
+            for (String key : DynamicApplication.pluginServices.keySet()) {
+                String value = DynamicApplication.pluginServices.get(key);
+                if(value.equals(serviceInfo.name)) {
+                    realServiceName = key;
+                    break;
+                }
+            }
+
+            serviceInfo.name = realServiceName;
         }
 
         private static void hookPackageManager() throws Exception {

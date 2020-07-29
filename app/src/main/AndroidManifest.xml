@@ -29,6 +29,9 @@
         <activity android:name=".study.changeSkin.PSChangeSkinActivity"/>
         <activity android:name=".study.dynamicProxy.PSStubActivity"/>
         <activity android:name=".study.dynamicProxy.PSDynamicProxyActivity"/>
+        <activity android:name=".study.dynamicService.PSDynamicServiceActivity"/>
+
+        <service android:name=".study.dynamicService.PSStubService1"/>
     </application>
 
 </manifest>

@@ -3,10 +3,10 @@ package com.dj.dynamicapk.study.dynamicProxy;
 import android.content.pm.ApplicationInfo;
 
 import com.dj.dynamicapk.utils.RefInvoke;
+import com.dj.dynamicapk.utils.Utils;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 

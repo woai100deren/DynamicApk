@@ -10,6 +10,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 import com.dj.dynamicapk.R;
+import com.dj.dynamicapk.utils.Utils;
 
 public class PSDynamicProxyActivity extends Activity {
 
